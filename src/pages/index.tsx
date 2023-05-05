@@ -5,7 +5,9 @@ import { SignInButton } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const { data } = api.posts.getAll.useQuery();
+  console.log(data);
 
   return (
     <>
@@ -23,6 +25,11 @@ const Home: NextPage = () => {
         {/* Signed out users get sign in button */}
         <SignInButton />
       </SignedOut>
+      <div>
+        {data?.map((post) => (
+          <div key={post.id}> {post.content}</div>
+        ))}
+      </div>
       </main>
     </>
   );
