@@ -1,12 +1,32 @@
-import {SignedIn, SignedOut, UserButton} from "@clerk/nextjs";
+import {SignedIn, SignedOut, UserButton, useUser} from "@clerk/nextjs";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { SignInButton } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
+const CreatePostWizard = () => {
+  const {user} = useUser();
+  
+  console.log(user);
+
+  if (!user)
+    return null;
+  return <div className="flex w-full gap-3">
+    <img src={user.profileImageUrl} 
+          alt="Profile image" 
+          className="w-14 h-14 rounded-full"></img>
+    <input placeholder="Type some emojis!" className="grow bg-transparent outline-none"/>
+  </div> 
+ }
+
 const Home: NextPage = () => {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const { data } = api.posts.getAll.useQuery();
+  const { data, isLoading } = api.posts.getAll.useQuery();
+
+  if (isLoading) 
+    return <div>Loading...</div>;
+  if (!data) 
+    return <div>Something went wrong</div>;
+
   console.log(data);
 
   return (
@@ -22,7 +42,10 @@ const Home: NextPage = () => {
           <div className="flex border-b border-slate-400 p-4">
             <SignedIn>
               {/* Mount the UserButton component */}
-              <UserButton />
+              <CreatePostWizard />
+              <div className="fixed bottom-0 right-0">
+                <UserButton />
+              </div>
             </SignedIn>
             <SignedOut>
               {/* Signed out users get sign in button */}
@@ -30,9 +53,11 @@ const Home: NextPage = () => {
             </SignedOut>
           </div>
           {/* Content */}
-          <div>
-            {data?.map((post) => (
-              <div key={post.id}> {post.content}</div>
+          <div className="flex flex-col">
+            {[...data, ...data]?.map(({post, author}) => (
+              <div key={post.id} className="border-b border-slate-400 p-8"> 
+                {post.content}
+              </div>
             ))}
           </div>
         </div>
