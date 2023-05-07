@@ -10,6 +10,7 @@ import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { PageLayout } from "~/components/layout";
 
 dayjs.extend(relativeTime);
 
@@ -136,36 +137,26 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <main className="flex h-screen justify-center">
-        <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
-          {/* Creating post wizard first */}
-          <div className="flex border-b border-slate-400 p-4">
-            {/* {!isSignedIn && (
-              <div className="flex justify-center">
-                <SignInButton />
-              </div>
-            )}
+      <PageLayout>
+        {/* 1. Creating post wizard depending on whether user is logged in */}
+        <div className="flex border-b border-slate-400 p-4">
+          {/* Mount the UserButton component and load the post wizard*/}
+          <SignedIn>
+            <CreatePostWizard />
+            <div className="fixed bottom-0 right-0">
+              <UserButton />
+            </div>
+          </SignedIn>
 
-            {isSignedIn && <CreatePostWizard />} */}
-
-            {/* Mount the UserButton component and load the post wizard*/}
-            <SignedIn>
-              <CreatePostWizard />
-              <div className="fixed bottom-0 right-0">
-                <UserButton />
-              </div>
-            </SignedIn>
-
-            {/* Signed out users get sign in button */}
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-          </div>
-
-          {/* Then we load the feed */}
-          <Feed />
+          {/* Signed out users get sign in button */}
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
         </div>
-      </main>
+
+        {/* 2. Then we load the feed */}
+        <Feed />
+      </PageLayout>
     </>
   );
 };
