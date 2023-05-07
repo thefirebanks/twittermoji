@@ -8,12 +8,10 @@ import superjson from "superjson";
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data } = api.profile.getUserByUsername.useQuery({
-    username,
+    username: "thefirebanks",
   });
 
   if (!data) return <div>404</div>;
-
-  console.log(username);
 
   return (
     <>
