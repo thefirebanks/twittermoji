@@ -32,8 +32,6 @@ const CreatePostWizard = () => {
     },
   });
 
-  console.log(user);
-
   if (!user) return null;
 
   return (
@@ -91,6 +89,27 @@ const Feed = () => {
   );
 };
 
+const Welcome = () => {
+  return (
+    <div className="w-full border-slate-400">
+      <div className="flex w-full flex-col bg-slate-600">
+        <div className="p-4 text-2xl font-bold">Welcome to TwitterMoji 😱.</div>
+        <div className="p-4">
+          A place where you can only tweet emojis (and numbers because they also
+          count as emojis).
+          <br />
+          <br />
+          Sign in with your Github account to proceed!
+        </div>
+      </div>
+      <br />
+      <div className="mx-auto my-auto flex w-36 justify-center rounded-full bg-slate-800 p-4 text-center text-2xl font-bold">
+        <SignInButton />
+      </div>
+    </div>
+  );
+};
+
 const Home: NextPage = () => {
   const { isLoaded: userLoaded } = useUser();
 
@@ -108,14 +127,14 @@ const Home: NextPage = () => {
           {/* Mount the UserButton component and load the post wizard*/}
           <SignedIn>
             <CreatePostWizard />
-            <div className="fixed bottom-0 right-0">
+            <div className="fixed bottom-4 right-4">
               <UserButton />
             </div>
           </SignedIn>
 
           {/* Signed out users get sign in button */}
           <SignedOut>
-            <SignInButton />
+            <Welcome />
           </SignedOut>
         </div>
 
